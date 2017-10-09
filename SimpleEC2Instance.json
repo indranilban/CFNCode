@@ -361,7 +361,7 @@
     },
     "Parameters": {
         "InstanceType": {
-            "Description": "WebServer EC2 instance type",
+            "Description": "WebServer EC2 instance type for test",
             "Type": "String",
             "Default": "t2.micro",
             "AllowedValues": [
