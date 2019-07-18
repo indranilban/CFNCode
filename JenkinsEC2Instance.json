@@ -207,35 +207,18 @@
                             [
                                 "#!/bin/bash -xe\n",
                                 "yum install -y aws-cfn-bootstrap\n",
-                                
-                                "         --stack ",
-                                {
-                                    "Ref": "AWS::StackName"
-                                },
-                                "         --resource WebServerInstance ",
-                                "         --configsets All ",
-                                "         --region ",
-                                {
-                                    "Ref": "AWS::Region"
-                                },
-                                "\n",
-                                "# Signal the status from cfn-init\n",
-                                "/opt/aws/bin/cfn-signal -e $? ",
-                                "         --stack ",
-                                {
-                                    "Ref": "AWS::StackName"
-                                },
-                                "         --resource WebServerInstance ",
-                                "         --region ",
-                                {
-                                    "Ref": "AWS::Region"
-                                },
                                	"# Install the files and packages from the metadata\n",
-                                "/opt/aws/bin/cfn-init -v ",
-                                "sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo\n",
-				"sudo rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key\n",
-				"sudo yum install jenkins –y\n",
-				"sudo service jenkins start\n",
+								"yum install -y wget\n",
+								"wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo >>jenkins-out.txt\n",
+								"rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key >>jenkins-out.txt\n",
+								"# Install jenkins >>jenkins-out.txt\n",
+								"yum install -y jenkins >>jenkins-out.txt\n",
+								"# Install java 1.8.0 >>jenkins-out.txt\n",
+								"yum install -y java-1.8.0 >>jenkins-out.txt\n",
+								"/usr/sbin/alternatives --set java /usr/lib/jvm/jre-1.8.0-openjdk.x86_64/bin/java >>jenkins-out.txt\n",
+								"/usr/sbin/alternatives --set javac /usr/lib/jvm/jre-1.8.0-openjdk.x86_64/bin/javac >>jenkins-out.txt\n",
+								"yum remove java-1.7.0-openjdk >>jenkins-out.txt\n",
+								"service jenkins start >>jenkins-out.txt\n",
                                 "\n"
                             ]
                         ]
@@ -309,6 +292,12 @@
                         "CidrIp": {
                             "Ref": "SSHLocation"
                         }
+                    },
+					{
+                        "IpProtocol": "tcp",
+                        "FromPort": "8080",
+                        "ToPort": "8080",
+                        "CidrIp": "0.0.0.0/0"
                     }
                 ]
             },
@@ -614,7 +603,7 @@
             },
             "eu-west-1": {
                 "PV64": "ami-bf0897c8",
-                "HVM64": "ami-a10897d6",
+                "HVM64": "ami-f9dd458a",
                 "HVMG2": "ami-d5bc24a2"
             },
             "eu-central-1": {
